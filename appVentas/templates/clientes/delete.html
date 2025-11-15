@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Cliente - Sistema de Ventas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .navbar { background: #333; padding: 1rem; }
+        .navbar a { color: white; margin: 0 1rem; text-decoration: none; }
+        .container { padding: 2rem; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; }
+        .warning { color: #856404; background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .btn { padding: 10px 20px; color: white; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; margin: 0 10px; }
+        .btn-danger { background: #dc3545; }
+        .btn-secondary { background: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'cliente_list' %}">Clientes</a>
+        <a href="{% url 'tienda_list' %}">Tiendas</a>
+        <a href="{% url 'compra_list' %}">Compras</a>
+        <a href="{% url 'logout' %}" style="float: right;">Cerrar Sesión ({{ user.username }})</a>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h1>Eliminar Cliente</h1>
+            
+            <div class="warning">
+                ⚠️ <strong>¿Estás seguro de que deseas eliminar este cliente?</strong>
+            </div>
+            
+            <p><strong>Cliente:</strong> {{ cliente.nombre }}</p>
+            <p><strong>Email:</strong> {{ cliente.email }}</p>
+            <p>Esta acción no se puede deshacer.</p>
+            
+            <form method="POST" style="margin-top: 2rem;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sí, Eliminar</button>
+                <a href="{% url 'cliente_list' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

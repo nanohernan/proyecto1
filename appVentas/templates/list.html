@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes - Sistema de Ventas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+        .navbar { background: #333; padding: 1rem; }
+        .navbar a { color: white; margin: 0 1rem; text-decoration: none; }
+        .container { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .btn { padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; border: none; cursor: pointer; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: black; }
+        .btn-danger { background: #dc3545; }
+        .table { width: 100%; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; font-weight: bold; }
+        tr:hover { background: #f8f9fa; }
+        .actions { display: flex; gap: 10px; }
+        .empty { text-align: center; padding: 2rem; color: #666; }
+        .alert { padding: 15px; background: #d4edda; color: #155724; border-radius: 5px; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'cliente_list' %}">Clientes</a>
+        <a href="{% url 'tienda_list' %}">Tiendas</a>
+        <a href="{% url 'compra_list' %}">Compras</a>
+        <a href="{% url 'logout' %}" style="float: right;">Cerrar Sesión ({{ user.username }})</a>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Clientes</h1>
+            {% if user.username == 'admin' %}
+            <a href="{% url 'cliente_create' %}" class="btn btn-success">Crear Nuevo Cliente</a>
+            {% endif %}
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="table">
+            {% if clientes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                    <tr>
+                        <td>{{ cliente.id_cliente }}</td>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td class="actions">
+                            <a href="{% url 'cliente_update' cliente.id_cliente %}" class="btn btn-warning">Editar</a>
+                            {% if user.username == 'admin' %}
+                            <a href="{% url 'cliente_delete' cliente.id_cliente %}" class="btn btn-danger">Eliminar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">
+                <p>No hay clientes registrados.</p>
+                {% if user.username == 'admin' %}
+                <a href="{% url 'cliente_create' %}" class="btn btn-success">Crear Primer Cliente</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
